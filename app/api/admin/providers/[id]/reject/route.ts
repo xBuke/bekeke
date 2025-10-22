@@ -10,11 +10,12 @@ const supabase = createClient(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const admin = await requireRole(["admin"]);
-    const providerId = params.id;
+    const resolvedParams = await params;
+    const providerId = resolvedParams.id;
     const body = await request.json().catch(() => ({}));
     const adminNote = body?.note || null;
 
