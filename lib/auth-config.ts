@@ -2,12 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createSupabaseClient } from "./supabase/api-client";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,6 +24,9 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
+
+        // Create Supabase client inside the function to avoid build-time issues
+        const supabase = createSupabaseClient();
 
         const { data, error } = await supabase.auth.signInWithPassword({
           email: credentials.email,

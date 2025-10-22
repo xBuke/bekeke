@@ -1,11 +1,6 @@
 import { MetadataRoute } from 'next';
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseClient } from '@/lib/supabase/api-client';
 import { seoConfig } from '@/lib/seo-config';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = seoConfig.url;
@@ -39,6 +34,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     // Dohvati kategorije iz baze
     const { data: categories } = await supabase
       .from('categories')

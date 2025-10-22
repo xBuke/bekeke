@@ -5,11 +5,6 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default function StripeSuccessPage() {
   const router = useRouter();
   const [countdown, setCountdown] = useState(3);
@@ -18,6 +13,12 @@ export default function StripeSuccessPage() {
     // Update stripe_onboarding_complete to true
     const updateOnboardingStatus = async () => {
       try {
+        // Create Supabase client inside the function to avoid build-time issues
+        const supabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+        
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
