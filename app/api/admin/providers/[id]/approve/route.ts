@@ -41,6 +41,10 @@ export async function POST(
       .eq("id", provider.user_id)
       .single();
 
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     // Update verification status
     const { error: updateError } = await supabase
       .from("service_providers")
