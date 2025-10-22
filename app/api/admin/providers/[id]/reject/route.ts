@@ -24,9 +24,16 @@ export async function POST(
       .from("service_providers")
       .select(`
         business_name,
-        users!inner(full_name, email)
+        user_id
       `)
       .eq("id", providerId)
+      .single();
+
+    // Dohvati user podatke
+    const { data: user } = await supabase
+      .from("users")
+      .select("full_name, email")
+      .eq("id", provider?.user_id)
       .single();
 
     const { error: updateError } = await supabase
@@ -46,11 +53,11 @@ export async function POST(
 
     // Pošalji email pružatelju s razlogom odbijanja
     try {
-      if (provider?.users?.email) {
-        const providerName = provider.business_name || provider.users.full_name;
+      if (user?.email) {
+        const providerName = provider?.business_name || user.full_name;
         
         await sendEmail({
-          to: provider.users.email,
+          to: user.email,
           subject: 'Profil nije odobren - Marketplace',
           html: emailTemplates.providerRejected(providerName, adminNote)
         });
