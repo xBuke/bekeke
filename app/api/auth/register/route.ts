@@ -35,16 +35,20 @@ export async function POST(request: NextRequest) {
       full_name, 
       email, 
       phone, 
-      password,
-      // Provider-specific fields (only if pruzatelj)
-      business_name,
-      oib,
-      description,
-      categories,
-      cities,
-      emergency_available,
-      emergency_fee
+      password
     } = validatedData
+
+    // Extract provider-specific fields only if role is pruzatelj
+    let business_name, oib, description, categories, cities, emergency_available, emergency_fee
+    if (role === 'pruzatelj') {
+      business_name = validatedData.business_name
+      oib = validatedData.oib
+      description = validatedData.description
+      categories = validatedData.categories
+      cities = validatedData.cities
+      emergency_available = validatedData.emergency_available
+      emergency_fee = validatedData.emergency_fee
+    }
 
     // Create user in Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
