@@ -5,17 +5,17 @@ import { seoConfig, generatePageTitle, generatePageDescription, generateOpenGrap
 import type { Metadata } from 'next';
 
 interface SearchPageProps {
-  params: {
+  params: Promise<{
     kategorija: string;
     grad: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     kategorija?: string;
     grad?: string;
     cijena_min?: string;
     cijena_max?: string;
     hitno?: string;
-  };
+  }>;
 }
 
 async function getCategories(): Promise<Category[]> {
@@ -116,11 +116,13 @@ async function getProviders(
 }
 
 export default async function SearchPage({ params, searchParams }: SearchPageProps) {
-  const { kategorija, grad } = params;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const { kategorija, grad } = resolvedParams;
 
   // Fetch all data in parallel
   const [providers, categories, cities] = await Promise.all([
-    getProviders(kategorija, grad, searchParams),
+    getProviders(kategorija, grad, resolvedSearchParams),
     getCategories(),
     getCities()
   ]);
@@ -136,8 +138,9 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
   );
 }
 
-export async function generateMetadata({ params }: { params: { kategorija: string; grad: string } }): Promise<Metadata> {
-  const { kategorija, grad } = params;
+export async function generateMetadata({ params }: { params: Promise<{ kategorija: string; grad: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { kategorija, grad } = resolvedParams;
   
   // Get category and city names for metadata
   const { data: category } = await supabase

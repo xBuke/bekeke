@@ -6,9 +6,9 @@ import { seoConfig, generatePageTitle, generatePageDescription } from '@/lib/seo
 import type { Metadata } from 'next';
 
 interface ProviderPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getProvider(id: string): Promise<ServiceProvider | null> {
@@ -34,8 +34,9 @@ async function getProvider(id: string): Promise<ServiceProvider | null> {
   return provider;
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const provider = await getProvider(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const provider = await getProvider(resolvedParams.id);
 
   if (!provider) {
     return {
@@ -69,7 +70,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     openGraph: {
       title: `${providerName} - ${categories}`,
       description,
-      url: `${seoConfig.url}/pruzatelj/${params.id}`,
+      url: `${seoConfig.url}/pruzatelj/${resolvedParams.id}`,
       siteName: seoConfig.name,
       locale: seoConfig.locale,
       type: 'profile',
@@ -98,7 +99,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function ProviderPage({ params }: ProviderPageProps) {
-  const provider = await getProvider(params.id);
+  const resolvedParams = await params;
+  const provider = await getProvider(resolvedParams.id);
 
   if (!provider) {
     notFound();

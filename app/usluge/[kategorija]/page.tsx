@@ -3,15 +3,15 @@ import ResultsGrid from '@/components/usluge/ResultsGrid';
 import { Category, City, ProviderWithRelations } from '@/types';
 
 interface CategorySearchPageProps {
-  params: {
+  params: Promise<{
     kategorija: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     grad?: string;
     cijena_min?: string;
     cijena_max?: string;
     hitno?: string;
-  };
+  }>;
 }
 
 async function getCategories(): Promise<Category[]> {
@@ -118,11 +118,13 @@ async function getProvidersByCategory(
 }
 
 export default async function CategorySearchPage({ params, searchParams }: CategorySearchPageProps) {
-  const { kategorija } = params;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const { kategorija } = resolvedParams;
 
   // Fetch all data in parallel
   const [providers, categories, cities] = await Promise.all([
-    getProvidersByCategory(kategorija, searchParams),
+    getProvidersByCategory(kategorija, resolvedSearchParams),
     getCategories(),
     getCities()
   ]);
@@ -138,8 +140,9 @@ export default async function CategorySearchPage({ params, searchParams }: Categ
   );
 }
 
-export async function generateMetadata({ params }: { params: { kategorija: string } }) {
-  const { kategorija } = params;
+export async function generateMetadata({ params }: { params: Promise<{ kategorija: string }> }) {
+  const resolvedParams = await params;
+  const { kategorija } = resolvedParams;
   
   // Get category name for metadata
   const { data: category } = await supabase
