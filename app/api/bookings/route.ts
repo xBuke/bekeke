@@ -4,6 +4,7 @@ import { requireAuth } from "@/lib/auth";
 import { sendEmail, emailTemplates } from "@/lib/email";
 import { bookingSchema, validateRequestBody } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { ipAddress } from '@vercel/functions';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -60,7 +61,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - 10 requests per minute for booking creation
-    const clientIP = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
+    const clientIP = ipAddress(request) || request.headers.get('x-forwarded-for') || 'unknown'
     if (!checkRateLimit(clientIP, 10, 60000)) {
       return NextResponse.json(
         { success: false, error: "Previše zahtjeva. Pokušajte ponovno za minutu." },

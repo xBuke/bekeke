@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import { registerKlijentSchema, registerPruzateljSchema, validateRequestBody } from "@/lib/validation"
 import { checkRateLimit } from "@/lib/rate-limit"
+import { ipAddress } from '@vercel/functions'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,7 +12,7 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - 5 requests per minute for registration
-    const clientIP = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
+    const clientIP = ipAddress(request) || request.headers.get('x-forwarded-for') || 'unknown'
     if (!checkRateLimit(clientIP, 5, 60000)) {
       return NextResponse.json(
         { success: false, error: "Previše zahtjeva. Pokušajte ponovno za minutu." },
