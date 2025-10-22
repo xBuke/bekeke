@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseClient } from "@/lib/supabase/api-client";
 import { requireRole } from "@/lib/auth";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // GET - admin list providers or fetch one by id
 export async function GET(request: NextRequest) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     await requireRole(["admin"]);
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");

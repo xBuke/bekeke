@@ -1,14 +1,11 @@
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseClient } from './supabase/api-client';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-09-30.clover',
-});
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export function getStripeClient() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2025-09-30.clover',
+  });
+}
 
 // Kalkulacija fees
 export function calculateFees(amount: number) {
@@ -24,6 +21,10 @@ export function calculateFees(amount: number) {
 
 // Refund logika
 export async function processRefund(bookingId: string, refundAmount?: number) {
+  // Initialize clients inside the function to avoid build-time issues
+  const supabase = createSupabaseClient();
+  const stripe = getStripeClient();
+  
   const { data: payment } = await supabase
     .from('payments')
     .select('*')

@@ -1,13 +1,12 @@
-import { stripe } from './stripe';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { getStripeClient } from './stripe';
+import { createSupabaseClient } from './supabase/api-client';
 
 export async function createConnectedAccount(providerId: string, email: string) {
   try {
+    // Initialize clients inside the function to avoid build-time issues
+    const stripe = getStripeClient();
+    const supabase = createSupabaseClient();
+    
     const account = await stripe.accounts.create({
       type: 'express',
       country: 'HR',
@@ -33,6 +32,9 @@ export async function createConnectedAccount(providerId: string, email: string) 
 
 export async function createAccountLink(accountId: string) {
   try {
+    // Initialize Stripe client inside the function to avoid build-time issues
+    const stripe = getStripeClient();
+    
     const accountLink = await stripe.accountLinks.create({
       account: accountId,
       refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/pruzatelj/stripe-refresh`,

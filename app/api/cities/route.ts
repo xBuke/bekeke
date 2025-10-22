@@ -1,10 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createSupabaseClient } from '@/lib/supabase/api-client';
 
 // Cache cities for 1 hour
 export const revalidate = 3600;
@@ -12,6 +7,9 @@ export const revalidate = 3600;
 // GET - fetch all cities (public endpoint)
 export async function GET() {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const { data: cities, error } = await supabase
       .from('cities')
       .select('*')

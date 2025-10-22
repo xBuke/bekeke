@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, calculateFees } from "@/lib/stripe";
-import { createClient } from "@supabase/supabase-js";
+import { getStripeClient, calculateFees } from "@/lib/stripe";
+import { createSupabaseClient } from "@/lib/supabase/api-client";
 import { requireAuth } from "@/lib/auth";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const user = await requireAuth();
     const { id: bookingId } = await params;
     
@@ -62,6 +60,7 @@ export async function POST(
     const fees = calculateFees(booking.total_price);
     
     // Kreiraj Payment Intent
+    const stripe = getStripeClient();
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(fees.amount * 100), // convert to cents
       currency: 'eur',

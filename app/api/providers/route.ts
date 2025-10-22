@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createSupabaseClient } from '@/lib/supabase/api-client';
 
 // GET - fetch all verified providers with optional filtering
 export async function GET(request: NextRequest) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const { searchParams } = new URL(request.url);
     const kategorija = searchParams.get('kategorija');
     const grad = searchParams.get('grad');

@@ -1,21 +1,22 @@
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseClient } from './supabase/api-client';
 import { calculateFees } from './stripe';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 // PayPal SDK initialization
-export const paypalConfig = {
-  clientId: process.env.PAYPAL_CLIENT_ID!,
-  clientSecret: process.env.PAYPAL_CLIENT_SECRET!,
-  environment: process.env.NODE_ENV === 'production' ? 'live' : 'sandbox',
-};
+export function getPaypalConfig() {
+  return {
+    clientId: process.env.PAYPAL_CLIENT_ID!,
+    clientSecret: process.env.PAYPAL_CLIENT_SECRET!,
+    environment: process.env.NODE_ENV === 'production' ? 'live' : 'sandbox',
+  };
+}
 
 // Create PayPal order
 export async function createPayPalOrder(bookingId: string, amount: number) {
   try {
+    // Initialize Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    const paypalConfig = getPaypalConfig();
+    
     const fees = calculateFees(amount);
     
     // Create payment record in database
@@ -77,6 +78,8 @@ export async function createPayPalOrder(bookingId: string, amount: number) {
 // Capture PayPal payment
 export async function capturePayPalPayment(orderId: string, paymentId: string) {
   try {
+    // Initialize Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
     // In a real implementation, you would call PayPal Orders API to capture
     // For now, we'll simulate a successful capture
     

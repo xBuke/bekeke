@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
+import { createSupabaseClient } from "@/lib/supabase/api-client"
 import { registerKlijentSchema, registerPruzateljSchema, validateRequestBody } from "@/lib/validation"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { ipAddress } from '@vercel/functions'
@@ -7,13 +7,11 @@ import { z } from 'zod'
 
 type RegisterPruzateljData = z.infer<typeof registerPruzateljSchema>
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 export async function POST(request: NextRequest) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     // Rate limiting - 5 requests per minute for registration
     const clientIP = ipAddress(request) || request.headers.get('x-forwarded-for') || 'unknown'
     if (!checkRateLimit(clientIP, 5, 60000)) {

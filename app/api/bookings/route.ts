@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseClient } from "@/lib/supabase/api-client";
 import { requireAuth } from "@/lib/auth";
 import { sendEmail, emailTemplates } from "@/lib/email";
 import { bookingSchema, validateRequestBody } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { ipAddress } from '@vercel/functions';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 // GET - dohvati bookinge korisnika
 export async function GET() {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const user = await requireAuth();
     
     let query = supabase
@@ -60,6 +58,9 @@ export async function GET() {
 // POST - kreiraj novi booking
 export async function POST(request: NextRequest) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     // Rate limiting - 10 requests per minute for booking creation
     const clientIP = ipAddress(request) || request.headers.get('x-forwarded-for') || 'unknown'
     if (!checkRateLimit(clientIP, 10, 60000)) {

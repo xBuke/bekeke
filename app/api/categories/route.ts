@@ -1,10 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createSupabaseClient } from '@/lib/supabase/api-client';
 
 // Cache categories for 1 hour
 export const revalidate = 3600;
@@ -12,6 +7,9 @@ export const revalidate = 3600;
 // GET - fetch all categories (public endpoint)
 export async function GET() {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const { data: categories, error } = await supabase
       .from('categories')
       .select('*')

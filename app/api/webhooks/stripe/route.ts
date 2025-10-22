@@ -1,21 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
-import { createClient } from '@supabase/supabase-js';
+import { getStripeClient } from '@/lib/stripe';
+import { createSupabaseClient } from '@/lib/supabase/api-client';
 import Stripe from 'stripe';
 import { sendEmail, emailTemplates } from '@/lib/email';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function POST(request: NextRequest) {
+  // Create Supabase client inside the function to avoid build-time issues
+  const supabase = createSupabaseClient();
+  
   const body = await request.text();
   const signature = request.headers.get('stripe-signature')!;
   
   let event: Stripe.Event;
   
   try {
+    const stripe = getStripeClient();
     event = stripe.webhooks.constructEvent(
       body,
       signature,

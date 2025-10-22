@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseClient } from "@/lib/supabase/api-client";
 import { requireAuth } from "@/lib/auth";
 import { capturePayPalPayment } from "@/lib/paypal";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const user = await requireAuth();
     const resolvedParams = await params;
     const bookingId = resolvedParams.id;

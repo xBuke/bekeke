@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseClient } from "@/lib/supabase/api-client";
 import { requireRole } from "@/lib/auth";
 import { sendEmail, emailTemplates } from "@/lib/email";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Create Supabase client inside the function to avoid build-time issues
+    const supabase = createSupabaseClient();
+    
     const admin = await requireRole(["admin"]);
     const resolvedParams = await params;
     const providerId = resolvedParams.id;
