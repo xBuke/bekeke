@@ -3,13 +3,13 @@ import ResultsGrid from '@/components/usluge/ResultsGrid';
 import { Category, City, ProviderWithRelations } from '@/types';
 
 interface BaseSearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     grad?: string;
     kategorija?: string;
     cijena_min?: string;
     cijena_max?: string;
     hitno?: string;
-  };
+  }>;
 }
 
 async function getCategories(): Promise<Category[]> {
@@ -116,9 +116,10 @@ async function getAllProviders(
 }
 
 export default async function BaseSearchPage({ searchParams }: BaseSearchPageProps) {
+  const resolvedSearchParams = await searchParams;
   // Fetch all data in parallel
   const [providers, categories, cities] = await Promise.all([
-    getAllProviders(searchParams),
+    getAllProviders(resolvedSearchParams),
     getCategories(),
     getCities()
   ]);
