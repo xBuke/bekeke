@@ -1,0 +1,218 @@
+# Marketplace za Lokalne Uslužne Djelatnosti - LLMs.txt
+
+## Općenito o projektu
+
+Ovo je marketplace platforma za povezivanje pružatelja lokalnih usluga s klijentima u Hrvatskoj. Platforma omogućava korisnicima da pronađu i rezerviraju usluge kao što su vodoinstalateri, električari, bravar, keramičar, soboslikar, čistačice, dadilje, instruktori, IT stručnjaci i frizeri.
+
+## Tech Stack
+
+- **Frontend**: Next.js 14+ (App Router)
+- **Backend**: Next.js API Routes (Node.js)
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: NextAuth.js
+- **Payments**: Stripe + PayPal
+- **Storage**: Supabase Storage
+- **Hosting**: Vercel
+- **Styling**: Tailwind CSS + shadcn/ui
+
+## Struktura projekta
+
+```
+app/
+├── (auth)/                    # Autentifikacijske stranice
+│   ├── login/
+│   └── register/
+├── (dashboard)/               # Dashboard stranice
+│   ├── admin/                 # Admin panel
+│   ├── klijent/              # Klijent dashboard
+│   └── pruzatelj/            # Pružatelj dashboard
+├── usluge/                   # Stranice za pretragu usluga
+│   └── [kategorija]/
+│       └── [grad]/
+├── pruzatelj/                # Profili pružatelja
+│   └── [id]/
+├── api/                      # API endpoints
+│   ├── auth/
+│   ├── bookings/
+│   ├── providers/
+│   ├── categories/
+│   ├── cities/
+│   └── webhooks/
+└── layout.tsx               # Root layout
+
+components/
+├── ui/                      # shadcn/ui komponente
+├── layout/                  # Header, Footer
+├── home/                    # Homepage komponente
+├── usluge/                  # Search i filter komponente
+├── pruzatelj/              # Pružatelj profil komponente
+├── dashboard/               # Dashboard komponente
+└── bookings/               # Booking i payment komponente
+
+lib/
+├── supabase/               # Supabase clienti
+├── stripe/                 # Stripe integracija
+├── auth.ts                 # NextAuth helperi
+├── email.ts                # Email funkcionalnost
+└── seo-config.ts          # SEO konfiguracija
+```
+
+## API Endpoints
+
+### Autentifikacija
+- `POST /api/auth/register` - Registracija korisnika
+- `GET /api/auth/[...nextauth]` - NextAuth endpoints
+
+### Pružatelji
+- `GET /api/providers` - Lista pružatelja
+- `GET /api/providers/[id]` - Detalji pružatelja
+- `POST /api/providers` - Kreiranje pružatelja (admin)
+
+### Bookings
+- `GET /api/bookings` - Lista bookinga korisnika
+- `POST /api/bookings` - Kreiranje novog bookinga
+- `POST /api/bookings/[id]/accept` - Prihvati booking
+- `POST /api/bookings/[id]/reject` - Odbij booking
+- `POST /api/bookings/[id]/checkout` - Stripe checkout
+- `POST /api/bookings/[id]/paypal-checkout` - PayPal checkout
+
+### Kategorije i gradovi
+- `GET /api/categories` - Lista kategorija
+- `GET /api/cities` - Lista gradova
+
+### Webhooks
+- `POST /api/webhooks/stripe` - Stripe webhook handler
+
+## Database Schema
+
+### Glavne tablice:
+- `users` - Korisnici (klijenti, pružatelji, admini)
+- `service_providers` - Pružatelji usluga
+- `categories` - Kategorije usluga
+- `cities` - Gradovi
+- `services` - Usluge i cijene
+- `bookings` - Rezervacije
+- `payments` - Plaćanja
+- `reviews` - Recenzije
+
+### Relacije:
+- `provider_categories` - Many-to-many pružatelj-kategorija
+- `provider_cities` - Many-to-many pružatelj-grad
+- `working_hours` - Radno vrijeme pružatelja
+- `gallery_images` - Galerija radova
+
+## User Roles
+
+1. **klijent** - Traži usluge, kreira bookinge, plaća
+2. **pruzatelj** - Nudi usluge, prima bookinge, prima plaćanja
+3. **admin** - Verificira pružatelje, upravlja platformom
+
+## Booking Flow
+
+1. Klijent pretražuje pružatelje po kategoriji/grad
+2. Klijent šalje zahtjev za booking
+3. Pružatelj prihvaća/odbija zahtjev
+4. Klijent plaća (Stripe/PayPal)
+5. Usluga se izvršava
+6. Klijent može ostaviti recenziju
+
+## Payment System
+
+- **Stripe Connect** - Pružatelji primaju novac direktno
+- **Platform fee** - 7% provizija za platformu
+- **Emergency fee** - Dodatna naknada za hitne intervencije
+- **Auto-payout** - Automatski transfer pružateljima
+
+## SEO i Metadata
+
+- Dinamički metadata za sve stranice
+- Sitemap generiran iz baze podataka
+- Open Graph i Twitter Card podrška
+- Robots.txt s pravilnim allow/disallow pravilima
+
+## Security
+
+- Row Level Security (RLS) u Supabase
+- Input validacija s Zod
+- Rate limiting
+- CSRF protection (NextAuth)
+
+## Lokacije
+
+Platforma pokriva sljedeće gradove:
+- Split
+- Zagreb  
+- Rijeka
+- Osijek
+- Dubrovnik
+
+## Kategorije usluga
+
+- Vodoinstalater (🚰)
+- Električar (⚡)
+- Bravar (🔐)
+- Keramičar (🧱)
+- Soboslikar (🎨)
+- Čistačica (🧹)
+- Dadilja (👶)
+- Instruktor (📚)
+- IT stručnjak (💻)
+- Frizer (💇)
+
+## Development Workflow
+
+1. **Setup**: Next.js + Supabase + NextAuth
+2. **Database**: Kreiranje tablica i RLS policies
+3. **Auth**: Login/Register forme
+4. **Search**: Pretraga pružatelja
+5. **Bookings**: Booking sistem
+6. **Payments**: Stripe + PayPal integracija
+7. **Admin**: Verifikacija pružatelja
+8. **SEO**: Metadata i sitemap
+9. **Deploy**: Vercel deployment
+
+## Environment Variables
+
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# NextAuth
+NEXTAUTH_URL=
+NEXTAUTH_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+FACEBOOK_CLIENT_ID=
+FACEBOOK_CLIENT_SECRET=
+
+# Stripe
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# PayPal
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+
+# Email
+RESEND_API_KEY=
+EMAIL_FROM=
+
+# App
+NEXT_PUBLIC_APP_URL=
+```
+
+## Korisne reference
+
+- **Next.js Docs**: https://nextjs.org/docs
+- **Supabase Docs**: https://supabase.com/docs
+- **Stripe Docs**: https://stripe.com/docs
+- **NextAuth Docs**: https://next-auth.js.org
+- **shadcn/ui**: https://ui.shadcn.com
+- **Tailwind CSS**: https://tailwindcss.com/docs
+
+## Kontakt
+
+Za pitanja o implementaciji ili funkcionalnosti, koristi ove informacije kao referencu za razumijevanje strukture i funkcionalnosti marketplace platforme.
