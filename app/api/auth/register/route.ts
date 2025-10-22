@@ -3,6 +3,9 @@ import { createClient } from "@supabase/supabase-js"
 import { registerKlijentSchema, registerPruzateljSchema, validateRequestBody } from "@/lib/validation"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { ipAddress } from '@vercel/functions'
+import { z } from 'zod'
+
+type RegisterPruzateljData = z.infer<typeof registerPruzateljSchema>
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -41,13 +44,14 @@ export async function POST(request: NextRequest) {
     // Extract provider-specific fields only if role is pruzatelj
     let business_name, oib, description, categories, cities, emergency_available, emergency_fee
     if (role === 'pruzatelj') {
-      business_name = (validatedData as any).business_name
-      oib = (validatedData as any).oib
-      description = (validatedData as any).description
-      categories = (validatedData as any).categories
-      cities = (validatedData as any).cities
-      emergency_available = (validatedData as any).emergency_available
-      emergency_fee = (validatedData as any).emergency_fee
+      const pruzateljData = validatedData as RegisterPruzateljData
+      business_name = pruzateljData.business_name
+      oib = pruzateljData.oib
+      description = pruzateljData.description
+      categories = pruzateljData.categories
+      cities = pruzateljData.cities
+      emergency_available = pruzateljData.emergency_available
+      emergency_fee = pruzateljData.emergency_fee
     }
 
     // Create user in Supabase Auth

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import ProviderProfile from '@/components/pruzatelj/ProviderProfile';
-import { ServiceProvider } from '@/types';
+import { ServiceProvider, Category, City } from '@/types';
 import { seoConfig, generatePageTitle, generatePageDescription } from '@/lib/seo-config';
 import type { Metadata } from 'next';
 
@@ -46,8 +46,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   const providerName = provider.business_name || provider.user?.full_name || 'Pružatelj';
-  const categories = (provider as any).categories?.map((cat: any) => cat.category?.name).filter(Boolean).join(', ') || 'Usluge';
-  const cities = (provider as any).cities?.map((city: any) => city.city?.name).filter(Boolean).join(', ') || 'Hrvatska';
+  const categories = (provider.categories as Array<{ category: Category }> | undefined)
+    ?.map(cat => cat.category?.name).filter(Boolean).join(', ') || 'Usluge';
+  const cities = (provider.cities as Array<{ city: City }> | undefined)
+    ?.map(city => city.city?.name).filter(Boolean).join(', ') || 'Hrvatska';
   
   const title = generatePageTitle(`${providerName} - ${categories}`);
   const description = generatePageDescription(
