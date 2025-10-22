@@ -12,7 +12,7 @@ export default async function AdminPage() {
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
     .toISOString();
 
-  const [{ data: verifiedCount }, { data: pendingCount }, { data: bookingsCount }, { data: feesSum }] = await Promise.all([
+  const [{ count: verifiedCount }, { count: pendingCount }, { count: bookingsCount }, { data: feesSum }] = await Promise.all([
     supabase.from("service_providers").select("id", { count: "exact", head: true }).eq("verification_status", "verified"),
     supabase.from("service_providers").select("id", { count: "exact", head: true }).eq("verification_status", "pending"),
     supabase.from("bookings").select("id", { count: "exact", head: true }).gte("created_at", startOfMonth),
