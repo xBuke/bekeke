@@ -24,7 +24,7 @@ export async function POST(
       .from("service_providers")
       .select(`
         business_name,
-        user:users(full_name, email)
+        users!inner(full_name, email)
       `)
       .eq("id", providerId)
       .single();
@@ -46,11 +46,11 @@ export async function POST(
 
     // Pošalji email pružatelju s razlogom odbijanja
     try {
-      if (provider?.user?.email) {
-        const providerName = provider.business_name || provider.user.full_name;
+      if (provider?.users?.email) {
+        const providerName = provider.business_name || provider.users.full_name;
         
         await sendEmail({
-          to: provider.user.email,
+          to: provider.users.email,
           subject: 'Profil nije odobren - Marketplace',
           html: emailTemplates.providerRejected(providerName, adminNote)
         });

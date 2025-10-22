@@ -25,7 +25,7 @@ export async function POST(
       .from("service_providers")
       .select(`
         *,
-        user:users(email, full_name)
+        users!inner(email, full_name)
       `)
       .eq("id", providerId)
       .single();
@@ -43,7 +43,7 @@ export async function POST(
     if (updateError) throw updateError;
 
     // Kreiraj Stripe Connect Express account
-    const account = await createConnectedAccount(providerId, provider.user.email);
+    const account = await createConnectedAccount(providerId, provider.users.email);
     
     // Generiraj onboarding link
     const onboardingLink = await createAccountLink(account.id);
@@ -59,10 +59,10 @@ export async function POST(
 
     // Pošalji email pružatelju s onboarding linkom
     try {
-      const providerName = provider.business_name || provider.user.full_name;
+      const providerName = provider.business_name || provider.users.full_name;
       
       await sendEmail({
-        to: provider.user.email,
+        to: provider.users.email,
         subject: 'Vaš profil je verificiran - Marketplace',
         html: emailTemplates.providerVerified(providerName, onboardingLink)
       });
