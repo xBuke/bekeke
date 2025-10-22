@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   const providerName = provider.business_name || provider.user?.full_name || 'Pružatelj';
-  const categories = provider.categories?.map(cat => cat.category?.name).filter(Boolean).join(', ') || 'Usluge';
-  const cities = provider.cities?.map(city => city.city?.name).filter(Boolean).join(', ') || 'Hrvatska';
+  const categories = (provider as any).categories?.map((cat: any) => cat.category?.name).filter(Boolean).join(', ') || 'Usluge';
+  const cities = (provider as any).cities?.map((city: any) => city.city?.name).filter(Boolean).join(', ') || 'Hrvatska';
   
   const title = generatePageTitle(`${providerName} - ${categories}`);
   const description = generatePageDescription(

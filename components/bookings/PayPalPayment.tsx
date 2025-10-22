@@ -13,7 +13,7 @@ export default function PayPalPayment({ bookingId, amount }: PayPalPaymentProps)
   const [error, setError] = useState<string | null>(null);
 
   const initialOptions = {
-    "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
+    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
     currency: "EUR",
     intent: "capture",
   };

@@ -43,6 +43,8 @@ async function getCities(): Promise<City[]> {
 async function getAllProviders(
   searchParams: BaseSearchPageProps['searchParams']
 ): Promise<ProviderWithRelations[]> {
+  const params = await searchParams;
+  
   // Build the base query
   let query = supabase
     .from('service_providers')
@@ -56,8 +58,8 @@ async function getAllProviders(
     .eq('verification_status', 'verified');
 
   // Apply category filter if specified
-  if (searchParams.kategorija) {
-    const categorySlugs = searchParams.kategorija.split(',');
+  if (params.kategorija) {
+    const categorySlugs = params.kategorija.split(',');
     const { data: categories } = await supabase
       .from('categories')
       .select('id')
@@ -69,8 +71,8 @@ async function getAllProviders(
   }
 
   // Apply city filter if specified
-  if (searchParams.grad) {
-    const citySlugs = searchParams.grad.split(',');
+  if (params.grad) {
+    const citySlugs = params.grad.split(',');
     const { data: cities } = await supabase
       .from('cities')
       .select('id')
@@ -82,18 +84,18 @@ async function getAllProviders(
   }
 
   // Apply price filters
-  if (searchParams.cijena_min) {
-    const minPrice = parseFloat(searchParams.cijena_min);
+  if (params.cijena_min) {
+    const minPrice = parseFloat(params.cijena_min);
     query = query.gte('services.price', minPrice);
   }
 
-  if (searchParams.cijena_max) {
-    const maxPrice = parseFloat(searchParams.cijena_max);
+  if (params.cijena_max) {
+    const maxPrice = parseFloat(params.cijena_max);
     query = query.lte('services.price', maxPrice);
   }
 
   // Apply emergency filter
-  if (searchParams.hitno === 'true') {
+  if (params.hitno === 'true') {
     query = query.eq('emergency_available', true);
   }
 
@@ -116,10 +118,9 @@ async function getAllProviders(
 }
 
 export default async function BaseSearchPage({ searchParams }: BaseSearchPageProps) {
-  const resolvedSearchParams = await searchParams;
   // Fetch all data in parallel
   const [providers, categories, cities] = await Promise.all([
-    getAllProviders(resolvedSearchParams),
+    getAllProviders(searchParams),
     getCategories(),
     getCities()
   ]);

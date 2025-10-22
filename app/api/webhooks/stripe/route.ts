@@ -110,14 +110,14 @@ export async function POST(request: NextRequest) {
             .eq('booking_id', payment.booking_id)
             .single();
           
-          if (bookingData?.client?.email && bookingData.provider?.user?.email && paymentData) {
-            const clientName = bookingData.client.full_name;
-            const providerName = bookingData.provider.business_name || bookingData.provider.user.full_name;
-            const serviceTitle = bookingData.service.title;
+          if (bookingData?.client?.[0]?.email && bookingData.provider?.[0]?.user?.[0]?.email && paymentData) {
+            const clientName = bookingData.client[0].full_name;
+            const providerName = bookingData.provider[0].business_name || bookingData.provider[0].user[0].full_name;
+            const serviceTitle = bookingData.service[0].title;
             
             // Email klijentu
             await sendEmail({
-              to: bookingData.client.email,
+              to: bookingData.client[0].email,
               subject: 'Plaćanje uspješno - Marketplace',
               html: emailTemplates.paymentSuccessClient(
                 clientName,
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
             
             // Email pružatelju
             await sendEmail({
-              to: bookingData.provider.user.email,
+              to: bookingData.provider[0].user[0].email,
               subject: 'Novo plaćanje primljeno - Marketplace',
               html: emailTemplates.paymentSuccessProvider(
                 providerName,

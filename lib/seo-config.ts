@@ -22,7 +22,7 @@ export const seoConfig = {
     'instruktor',
     'it stručnjak',
     'frizer'
-  ],
+  ] as string[],
   ogImage: "/og-image.png", // Dodaj sliku kasnije
   twitterHandle: "@marketplace_hr", // Promijeni kad odabereš handle
   author: "Marketplace Team",

@@ -103,13 +103,13 @@ export async function POST(
         .eq('id', bookingId)
         .single();
       
-      if (bookingData?.client?.email && bookingData.provider && bookingData.service) {
-        const providerName = bookingData.provider.business_name || bookingData.provider.user.full_name;
-        const clientName = bookingData.client.full_name;
-        const serviceTitle = bookingData.service.title;
+      if (bookingData?.client?.[0]?.email && bookingData.provider && bookingData.service) {
+        const providerName = bookingData.provider[0]?.business_name || bookingData.provider[0]?.user[0]?.full_name;
+        const clientName = bookingData.client[0].full_name;
+        const serviceTitle = bookingData.service[0].title;
         
         await sendEmail({
-          to: bookingData.client.email,
+          to: bookingData.client[0].email,
           subject: 'Zahtjev je odbijen - Marketplace',
           html: emailTemplates.bookingRejected(
             clientName,

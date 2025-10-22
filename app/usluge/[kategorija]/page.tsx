@@ -46,6 +46,8 @@ async function getProvidersByCategory(
   categorySlug: string,
   searchParams: CategorySearchPageProps['searchParams']
 ): Promise<ProviderWithRelations[]> {
+  const params = await searchParams;
+  
   // Get category ID from slug
   const { data: category } = await supabase
     .from('categories')
@@ -71,8 +73,8 @@ async function getProvidersByCategory(
     .in('provider_categories.category_id', [category.id]);
 
   // Apply city filter if specified
-  if (searchParams.grad) {
-    const citySlugs = searchParams.grad.split(',');
+  if (params.grad) {
+    const citySlugs = params.grad.split(',');
     const { data: cities } = await supabase
       .from('cities')
       .select('id')
@@ -84,18 +86,18 @@ async function getProvidersByCategory(
   }
 
   // Apply price filters
-  if (searchParams.cijena_min) {
-    const minPrice = parseFloat(searchParams.cijena_min);
+  if (params.cijena_min) {
+    const minPrice = parseFloat(params.cijena_min);
     query = query.gte('services.price', minPrice);
   }
 
-  if (searchParams.cijena_max) {
-    const maxPrice = parseFloat(searchParams.cijena_max);
+  if (params.cijena_max) {
+    const maxPrice = parseFloat(params.cijena_max);
     query = query.lte('services.price', maxPrice);
   }
 
   // Apply emergency filter
-  if (searchParams.hitno === 'true') {
+  if (params.hitno === 'true') {
     query = query.eq('emergency_available', true);
   }
 
@@ -119,12 +121,11 @@ async function getProvidersByCategory(
 
 export default async function CategorySearchPage({ params, searchParams }: CategorySearchPageProps) {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
   const { kategorija } = resolvedParams;
 
   // Fetch all data in parallel
   const [providers, categories, cities] = await Promise.all([
-    getProvidersByCategory(kategorija, resolvedSearchParams),
+    getProvidersByCategory(kategorija, searchParams),
     getCategories(),
     getCities()
   ]);

@@ -145,13 +145,13 @@ export async function POST(request: NextRequest) {
         .eq('id', service_id)
         .single();
       
-      if (providerData?.user?.email && clientData && serviceData) {
-        const providerName = providerData.business_name || providerData.user.full_name;
+      if (providerData?.user?.[0]?.email && clientData && serviceData) {
+        const providerName = providerData.business_name || providerData.user[0].full_name;
         const clientName = clientData.full_name;
         const serviceTitle = serviceData.title;
         
         await sendEmail({
-          to: providerData.user.email,
+          to: providerData.user[0].email,
           subject: 'Novi zahtjev za uslugu - Marketplace',
           html: emailTemplates.newBooking(
             providerName,

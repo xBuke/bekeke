@@ -51,6 +51,8 @@ async function getProviders(
   citySlug: string,
   searchParams: SearchPageProps['searchParams']
 ): Promise<ProviderWithRelations[]> {
+  const params = await searchParams;
+  
   // Get category and city IDs from slugs
   const { data: category } = await supabase
     .from('categories')
@@ -83,17 +85,17 @@ async function getProviders(
     .in('provider_cities.city_id', [city.id]);
 
   // Apply additional filters from search params
-  if (searchParams.cijena_min) {
-    const minPrice = parseFloat(searchParams.cijena_min);
+  if (params.cijena_min) {
+    const minPrice = parseFloat(params.cijena_min);
     query = query.gte('services.price', minPrice);
   }
 
-  if (searchParams.cijena_max) {
-    const maxPrice = parseFloat(searchParams.cijena_max);
+  if (params.cijena_max) {
+    const maxPrice = parseFloat(params.cijena_max);
     query = query.lte('services.price', maxPrice);
   }
 
-  if (searchParams.hitno === 'true') {
+  if (params.hitno === 'true') {
     query = query.eq('emergency_available', true);
   }
 
@@ -117,12 +119,11 @@ async function getProviders(
 
 export default async function SearchPage({ params, searchParams }: SearchPageProps) {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
   const { kategorija, grad } = resolvedParams;
 
   // Fetch all data in parallel
   const [providers, categories, cities] = await Promise.all([
-    getProviders(kategorija, grad, resolvedSearchParams),
+    getProviders(kategorija, grad, searchParams),
     getCategories(),
     getCities()
   ]);
