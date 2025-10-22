@@ -34,7 +34,7 @@ export async function processRefund(bookingId: string, refundAmount?: number) {
     return;
   }
   
-  const refund = await stripe.refunds.create({
+  await stripe.refunds.create({
     payment_intent: payment.payment_intent_id,
     amount: refundAmount 
       ? Math.round(refundAmount * 100) 

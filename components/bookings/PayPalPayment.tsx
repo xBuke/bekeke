@@ -45,7 +45,7 @@ export default function PayPalPayment({ bookingId, amount }: PayPalPaymentProps)
     }
   };
 
-  const handleApprove = async (data: any) => {
+  const handleApprove = async (data: { orderID: string }) => {
     try {
       setLoading(true);
       setError(null);
@@ -72,7 +72,7 @@ export default function PayPalPayment({ bookingId, amount }: PayPalPaymentProps)
     }
   };
 
-  const handleError = (err: any) => {
+  const handleError = (err: unknown) => {
     console.error('PayPal error:', err);
     setError('Payment failed. Please try again.');
     setLoading(false);

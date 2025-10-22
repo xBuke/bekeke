@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       const categoryIds = kategorija.split(',');
       filteredProviders = filteredProviders.filter(provider => {
         if (!provider.categories || provider.categories.length === 0) return false;
-        return provider.categories.some((pc: any) => 
+        return provider.categories.some((pc: { category: { id: string } }) => 
           categoryIds.includes(pc.category.id)
         );
       });
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       const cityIds = grad.split(',');
       filteredProviders = filteredProviders.filter(provider => {
         if (!provider.cities || provider.cities.length === 0) return false;
-        return provider.cities.some((pc: any) => 
+        return provider.cities.some((pc: { city: { id: string } }) => 
           cityIds.includes(pc.city.id)
         );
       });
@@ -69,8 +69,8 @@ export async function GET(request: NextRequest) {
       filteredProviders = filteredProviders.filter(provider => {
         if (!provider.services || provider.services.length === 0) return false;
         
-        const minPrice = Math.min(...provider.services.map((s: any) => s.price));
-        const maxPrice = Math.max(...provider.services.map((s: any) => s.price));
+        const minPrice = Math.min(...provider.services.map((s: { price: number }) => s.price));
+        const maxPrice = Math.max(...provider.services.map((s: { price: number }) => s.price));
         
         if (cijena_min && maxPrice < parseFloat(cijena_min)) return false;
         if (cijena_max && minPrice > parseFloat(cijena_max)) return false;

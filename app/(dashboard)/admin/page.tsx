@@ -19,7 +19,7 @@ export default async function AdminPage() {
     supabase.from("payments").select("platform_fee").gte("created_at", startOfMonth),
   ]);
 
-  const totalFees = (feesSum || []).reduce((sum: number, row: any) => sum + (row.platform_fee || 0), 0);
+  const totalFees = (feesSum || []).reduce((sum: number, row: { platform_fee?: number }) => sum + (row.platform_fee || 0), 0);
 
   return (
     <div className="flex min-h-screen">

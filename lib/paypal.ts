@@ -36,23 +36,23 @@ export async function createPayPalOrder(bookingId: string, amount: number) {
       throw new Error('Failed to create payment record');
     }
 
-    // PayPal order data
-    const orderData = {
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          amount: {
-            currency_code: 'EUR',
-            value: fees.amount.toFixed(2),
-          },
-          description: `Booking payment for booking ${bookingId}`,
-        },
-      ],
-      application_context: {
-        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/klijent/bookings/${bookingId}/success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/klijent`,
-      },
-    };
+    // PayPal order data (commented out for now as it's not used in the mock implementation)
+    // const orderData = {
+    //   intent: 'CAPTURE',
+    //   purchase_units: [
+    //     {
+    //       amount: {
+    //         currency_code: 'EUR',
+    //         value: fees.amount.toFixed(2),
+    //       },
+    //       description: `Booking payment for booking ${bookingId}`,
+    //     },
+    //   ],
+    //   application_context: {
+    //     return_url: `${process.env.NEXT_PUBLIC_APP_URL}/klijent/bookings/${bookingId}/success`,
+    //     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/klijent`,
+    //   },
+    // };
 
     // In a real implementation, you would call PayPal Orders API here
     // For now, we'll return a mock order ID

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
 interface ProviderDetail {
@@ -119,13 +120,13 @@ export default function VerificationModal({ providerId }: { providerId: string }
         {data.id_card_url && (
           <div>
             <div className="text-sm text-muted-foreground mb-1">Osobna iskaznica</div>
-            <img src={data.id_card_url} alt="ID" className="rounded-md border" />
+            <Image src={data.id_card_url} alt="ID" width={300} height={200} className="rounded-md border" />
           </div>
         )}
         {data.profile_photo_url && (
           <div>
             <div className="text-sm text-muted-foreground mb-1">Profilna fotografija</div>
-            <img src={data.profile_photo_url} alt="Profil" className="rounded-full border w-28 h-28 object-cover" />
+            <Image src={data.profile_photo_url} alt="Profil" width={112} height={112} className="rounded-full border object-cover" />
           </div>
         )}
       </div>

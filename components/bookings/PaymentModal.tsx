@@ -8,7 +8,6 @@ import {
   useStripe,
   useElements
 } from '@stripe/react-stripe-js';
-import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import PayPalPayment from './PayPalPayment';
 

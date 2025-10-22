@@ -75,9 +75,9 @@ export async function POST(
       onboardingLink,
       message: "Provider approved and Stripe account created" 
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
-      { success: false, error: error?.message || "Failed to approve provider" },
+      { success: false, error: error instanceof Error ? error.message : "Failed to approve provider" },
       { status: 500 }
     );
   }

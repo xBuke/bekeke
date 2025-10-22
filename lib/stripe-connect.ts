@@ -31,7 +31,7 @@ export async function createConnectedAccount(providerId: string, email: string) 
   }
 }
 
-export async function createAccountLink(accountId: string, providerId: string) {
+export async function createAccountLink(accountId: string, _providerId: string) {
   try {
     const accountLink = await stripe.accountLinks.create({
       account: accountId,

@@ -37,7 +37,7 @@ export function measureAsyncPerformance<T>(
 /**
  * Log Core Web Vitals in development
  */
-export function logWebVitals(metric: any) {
+export function logWebVitals(metric: { name: string; value: number }) {
   if (process.env.NODE_ENV === 'development') {
     console.log('📊 Web Vital:', metric.name, metric.value);
   }

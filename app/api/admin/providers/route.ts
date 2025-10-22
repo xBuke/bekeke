@@ -48,9 +48,9 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
     if (error) throw error;
     return NextResponse.json({ success: true, data });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
-      { success: false, error: error?.message || "Failed to fetch providers" },
+      { success: false, error: error instanceof Error ? error.message : "Failed to fetch providers" },
       { status: 500 }
     );
   }
