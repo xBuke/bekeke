@@ -100,3 +100,25 @@ openssl rand -base64 32
 6. Dodaj u `.env.local` kao `RESEND_API_KEY`
 7. Za `EMAIL_FROM` koristi `noreply@resend.dev` (test domena)
    - Za production, dodaj vlastitu domenu u Resend dashboardu
+
+### Supabase Email Configuration
+1. Idi na Supabase Dashboard → Authentication → Settings
+2. U "Email Templates" sekciji:
+   - **Disable** "Enable email confirmations" (koristimo custom email flow)
+   - **Disable** "Enable email change confirmations"
+   - **Keep enabled** "Enable password resets" (ali ćemo override s custom email-om)
+3. U "URL Configuration":
+   - **Site URL**: `http://localhost:3000` (za development)
+   - **Redirect URLs**: Dodaj sljedeće URL-ove:
+     ```
+     http://localhost:3000/reset-password
+     https://uslugo.vercel.app/reset-password
+     ```
+4. U "SMTP Settings" (opcionalno):
+   - Možeš koristiti Supabase SMTP ili Resend
+   - Za production, preporučujemo Resend za bolju deliverability
+
+### Email Rate Limiting
+- **Forgot Password**: 3 zahtjeva po 15 minuta po IP adresi
+- **Registration**: 5 zahtjeva po minuti po IP adresi
+- Rate limiting se automatski primjenjuje u API endpoint-ima

@@ -90,12 +90,8 @@ export default function LoginPage() {
 
               <div className="flex items-center justify-between">
                 <Link 
-                  href="#" 
-                  className="text-sm text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    toast.error('Funkcija resetiranja lozinke nije dostupna u MVP verziji')
-                  }}
+                  href="/forgot-password" 
+                  className="text-sm text-gray-600 hover:text-gray-900"
                 >
                   Zaboravili ste lozinku?
                 </Link>
