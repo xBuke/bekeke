@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { StatsCard } from './StatsCard';
-import PruzateljBookingsTable from './PruzateljBookingsTable';
+import PartnerBookingsTable from './PartnerBookingsTable';
 import ApprovedBookingsList from './ApprovedBookingsList';
 import { BookingWithRelations, ServiceProvider } from '@/types';
 // import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, Calendar, Euro, Users } from 'lucide-react';
 
-interface PruzateljDashboardContentProps {
+interface PartnerDashboardContentProps {
   provider: ServiceProvider;
 }
 
-export default function PruzateljDashboardContent({ provider }: PruzateljDashboardContentProps) {
+export default function PartnerDashboardContent({ provider }: PartnerDashboardContentProps) {
   const [bookings, setBookings] = useState<BookingWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -125,7 +125,7 @@ export default function PruzateljDashboardContent({ provider }: PruzateljDashboa
       </div>
 
       {/* New bookings table */}
-      <PruzateljBookingsTable 
+      <PartnerBookingsTable 
         bookings={pendingBookings}
         onBookingUpdate={fetchBookings}
       />

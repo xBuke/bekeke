@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
-import ProviderProfile from '@/components/pruzatelj/ProviderProfile';
+import ProviderProfile from '@/components/partner/ProviderProfile';
 import { ServiceProvider, Category, City } from '@/types';
 import { seoConfig, generatePageTitle, generatePageDescription } from '@/lib/seo-config';
 import type { Metadata } from 'next';
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title: `${providerName} - ${categories}`,
       description,
-      url: `${seoConfig.url}/pruzatelj/${resolvedParams.id}`,
+      url: `${seoConfig.url}/partner/${resolvedParams.id}`,
       siteName: seoConfig.name,
       locale: seoConfig.locale,
       type: 'profile',

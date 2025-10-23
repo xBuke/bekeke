@@ -1,12 +1,12 @@
 import { requireRole } from '@/lib/auth';
 import { supabase } from '@/lib/supabase/server';
-import PruzateljSidebar from '@/components/dashboard/PruzateljSidebar';
-import PruzateljDashboardContent from '@/components/dashboard/PruzateljDashboardContent';
+import PartnerSidebar from '@/components/dashboard/PartnerSidebar';
+import PartnerDashboardContent from '@/components/dashboard/PartnerDashboardContent';
 // import { ServiceProvider } from '@/types';
 
 export default async function PružateljDashboard() {
   // Provjeri autentifikaciju i ulogu
-  const user = await requireRole(['pruzatelj']);
+  const user = await requireRole(['partner']);
 
   // Dohvati podatke o pružatelju
   const { data: provider, error } = await supabase
@@ -26,7 +26,7 @@ export default async function PružateljDashboard() {
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
         {/* Sidebar */}
-        <PruzateljSidebar />
+        <PartnerSidebar />
         
         {/* Main content */}
         <div className="flex-1 lg:ml-64">
@@ -39,7 +39,7 @@ export default async function PružateljDashboard() {
                 </p>
               </div>
               
-              <PruzateljDashboardContent provider={provider} />
+              <PartnerDashboardContent provider={provider} />
             </div>
           </div>
         </div>
