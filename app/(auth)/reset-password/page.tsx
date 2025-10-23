@@ -21,18 +21,6 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
 
-  useEffect(() => {
-    // Check for error from auth callback
-    if (error) {
-      toast.error('Neispravan link za resetiranje lozinke')
-      router.push('/forgot-password')
-      return
-    }
-    
-    // Check if user has a valid session (from Supabase auth callback)
-    checkSession()
-  }, [error, router, checkSession])
-
   const checkSession = useCallback(async () => {
     try {
       const { data: { session }, error } = await supabase.auth.getSession()
@@ -51,6 +39,18 @@ export default function ResetPasswordPage() {
       setIsValidating(false)
     }
   }, [router])
+
+  useEffect(() => {
+    // Check for error from auth callback
+    if (error) {
+      toast.error('Neispravan link za resetiranje lozinke')
+      router.push('/forgot-password')
+      return
+    }
+    
+    // Check if user has a valid session (from Supabase auth callback)
+    checkSession()
+  }, [error, router, checkSession])
 
   const validatePassword = (password: string) => {
     if (password.length < 8) {
