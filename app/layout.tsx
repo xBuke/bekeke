@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
 import { seoConfig } from "@/lib/seo-config";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -83,10 +84,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
-        <Toaster position="top-right" />
+        <SessionProvider>
+          <Header />
+          {children}
+          <Footer />
+          <Toaster position="top-right" />
+        </SessionProvider>
       </body>
     </html>
   );

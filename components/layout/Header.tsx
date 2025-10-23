@@ -4,9 +4,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -37,12 +39,28 @@ export default function Header() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" asChild>
-              <Link href="/login">Prijava</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Registracija</Link>
-            </Button>
+            {session ? (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link href="/profil">Profil</Link>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                >
+                  Odjava
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link href="/login">Prijava</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/register">Registracija</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -77,16 +95,38 @@ export default function Header() {
                 Postani partner
               </Link>
               <div className="pt-4 space-y-2">
-                <Button variant="ghost" asChild className="w-full justify-start">
-                  <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                    Prijava
-                  </Link>
-                </Button>
-                <Button asChild className="w-full">
-                  <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                    Registracija
-                  </Link>
-                </Button>
+                {session ? (
+                  <>
+                    <Button variant="ghost" asChild className="w-full justify-start">
+                      <Link href="/profil" onClick={() => setIsMobileMenuOpen(false)}>
+                        Profil
+                      </Link>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => {
+                        signOut({ callbackUrl: '/' });
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Odjava
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" asChild className="w-full justify-start">
+                      <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                        Prijava
+                      </Link>
+                    </Button>
+                    <Button asChild className="w-full">
+                      <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
+                        Registracija
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
