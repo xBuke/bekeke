@@ -106,17 +106,35 @@ openssl rand -base64 32
 2. U "Email Templates" sekciji:
    - **Disable** "Enable email confirmations" (koristimo custom email flow)
    - **Disable** "Enable email change confirmations"
-   - **Keep enabled** "Enable password resets" (ali ćemo override s custom email-om)
+   - **Keep enabled** "Enable password resets" (Supabase šalje svoje email-ove)
 3. U "URL Configuration":
    - **Site URL**: `http://localhost:3000` (za development)
    - **Redirect URLs**: Dodaj sljedeće URL-ove:
      ```
-     http://localhost:3000/reset-password
-     https://uslugo.vercel.app/reset-password
+     http://localhost:3000/auth/callback
+     https://uslugo.vercel.app/auth/callback
      ```
-4. U "SMTP Settings" (opcionalno):
+4. U "Email Templates" sekciji:
+   - Klikni na "Reset Password" template
+   - Customiziraj HTML da odgovara tvom brandingu
+   - Koristi Mustache sintaksu: `{{ .ConfirmationURL }}` za link
+5. U "SMTP Settings" (opcionalno):
    - Možeš koristiti Supabase SMTP ili Resend
    - Za production, preporučujemo Resend za bolju deliverability
+
+### Password Reset Flow
+Nova implementacija koristi Supabase auth callback:
+
+1. **Korisnik zatraži reset**: `/forgot-password` → API poziva `supabase.auth.resetPasswordForEmail()`
+2. **Supabase šalje email**: Koristi svoj template s linkom na `/auth/callback`
+3. **Korisnik klikne link**: Redirect na Supabase → callback handler
+4. **Auth callback**: `/auth/callback` → validira token → redirect na `/reset-password`
+5. **Reset stranica**: Koristi Supabase session za ažuriranje lozinke
+
+**Prednosti**:
+- Sigurniji (Supabase upravlja tokenima)
+- Jednostavniji kod (manje custom logike)
+- Bolja integracija s Supabase auth sistemom
 
 ### Email Rate Limiting
 - **Forgot Password**: 3 zahtjeva po 15 minuta po IP adresi

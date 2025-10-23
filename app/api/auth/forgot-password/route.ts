@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { createSupabaseClient } from "@/lib/supabase/api-client"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { ipAddress } from '@vercel/functions'
-import { sendEmail, emailTemplates } from "@/lib/email"
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,27 +40,12 @@ export async function POST(request: NextRequest) {
       try {
         // Use Supabase's built-in password reset
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`,
+          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
         })
 
         if (resetError) {
           console.error('Password reset error:', resetError)
           // Still return success to prevent enumeration
-        } else {
-          // Send branded email notification
-          try {
-            await sendEmail({
-              to: email,
-              subject: 'Resetiranje lozinke - Uslugo',
-              html: emailTemplates.passwordReset(
-                userData.full_name || 'Korisniče',
-                `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`
-              )
-            })
-          } catch (emailError) {
-            console.error('Email sending failed:', emailError)
-            // Don't fail the request, Supabase already sent the reset email
-          }
         }
       } catch (error) {
         console.error('Password reset process error:', error)

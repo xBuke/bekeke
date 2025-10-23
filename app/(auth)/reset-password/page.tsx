@@ -8,49 +8,45 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import toast from 'react-hot-toast'
+import { createSupabaseClient } from '@/lib/supabase/client'
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isValidating, setIsValidating] = useState(true)
-  const [isValidToken, setIsValidToken] = useState(false)
+  const [isValidSession, setIsValidSession] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const error = searchParams.get('error')
 
   useEffect(() => {
-    if (!token) {
+    // Check for error from auth callback
+    if (error) {
       toast.error('Neispravan link za resetiranje lozinke')
       router.push('/forgot-password')
       return
     }
     
-    // Validate token with backend
-    validateToken()
-  }, [token, router])
+    // Check if user has a valid session (from Supabase auth callback)
+    checkSession()
+  }, [error, router])
 
-  const validateToken = async () => {
+  const checkSession = async () => {
     try {
-      const response = await fetch('/api/auth/validate-reset-token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      })
-
-      const data = await response.json()
+      const supabase = createSupabaseClient()
+      const { data: { session }, error } = await supabase.auth.getSession()
       
-      if (data.success) {
-        setIsValidToken(true)
-      } else {
+      if (error || !session) {
         toast.error('Link za resetiranje je neispravan ili je istekao')
         router.push('/forgot-password')
+        return
       }
+      
+      setIsValidSession(true)
     } catch {
-      toast.error('Greška pri validaciji linka')
+      toast.error('Greška pri provjeri sesije')
       router.push('/forgot-password')
     } finally {
       setIsValidating(false)
@@ -86,26 +82,23 @@ export default function ResetPasswordPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          token,
-          password 
-        }),
+      const supabase = createSupabaseClient()
+      
+      // Update password using Supabase session
+      const { error } = await supabase.auth.updateUser({
+        password: password
       })
 
-      const data = await response.json()
-
-      if (data.success) {
-        setIsSuccess(true)
-        toast.success('Lozinka je uspješno resetirana!')
-      } else {
-        toast.error(data.error || 'Greška pri resetiranju lozinke')
+      if (error) {
+        console.error('Password update error:', error)
+        toast.error('Greška pri ažuriranju lozinke')
+        return
       }
-    } catch {
+
+      setIsSuccess(true)
+      toast.success('Lozinka je uspješno resetirana!')
+    } catch (error) {
+      console.error('Password reset error:', error)
       toast.error('Dogodila se greška. Molimo pokušajte ponovno.')
     } finally {
       setIsLoading(false)
@@ -154,7 +147,7 @@ export default function ResetPasswordPage() {
     )
   }
 
-  if (!isValidToken) {
+  if (!isValidSession) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
