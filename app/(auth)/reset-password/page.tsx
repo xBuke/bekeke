@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import toast from 'react-hot-toast'
-import { createSupabaseClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase/client'
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
@@ -31,11 +31,10 @@ export default function ResetPasswordPage() {
     
     // Check if user has a valid session (from Supabase auth callback)
     checkSession()
-  }, [error, router])
+  }, [error, router, checkSession])
 
-  const checkSession = async () => {
+  const checkSession = useCallback(async () => {
     try {
-      const supabase = createSupabaseClient()
       const { data: { session }, error } = await supabase.auth.getSession()
       
       if (error || !session) {
@@ -51,7 +50,7 @@ export default function ResetPasswordPage() {
     } finally {
       setIsValidating(false)
     }
-  }
+  }, [router])
 
   const validatePassword = (password: string) => {
     if (password.length < 8) {
@@ -82,8 +81,6 @@ export default function ResetPasswordPage() {
     setIsLoading(true)
 
     try {
-      const supabase = createSupabaseClient()
-      
       // Update password using Supabase session
       const { error } = await supabase.auth.updateUser({
         password: password
