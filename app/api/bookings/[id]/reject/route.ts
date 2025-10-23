@@ -17,8 +17,8 @@ export async function POST(
     const body = await request.json();
     const { provider_notes } = body;
 
-    // Provjeri da je user pružatelj
-    if (user.role !== 'pruzatelj') {
+    // Provjeri da je user partner
+    if (user.role !== 'partner') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -39,7 +39,7 @@ export async function POST(
       );
     }
 
-    // Dohvati booking i provjeri da je pružatelj vlasnik
+    // Dohvati booking i provjeri da je partner vlasnik
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
       .select('*')

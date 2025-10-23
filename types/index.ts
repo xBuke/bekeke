@@ -1,5 +1,5 @@
 // Database enums
-export type UserRole = 'klijent' | 'pruzatelj' | 'admin';
+export type UserRole = 'klijent' | 'partner' | 'admin';
 export type BookingStatus = 'pending' | 'accepted' | 'rejected' | 'completed' | 'cancelled';
 export type PaymentStatus = 'pending' | 'completed' | 'refunded' | 'failed';
 export type VerificationStatus = 'pending' | 'verified' | 'rejected';
@@ -137,7 +137,7 @@ export interface RegisterKlijentInput {
   phone: string;
 }
 
-export interface RegisterPruzateljInput extends RegisterKlijentInput {
+export interface RegisterPartnerInput extends RegisterKlijentInput {
   business_name?: string;
   oib: string;
   description: string;

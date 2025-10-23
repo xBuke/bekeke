@@ -49,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select('slug, updated_at')
       .order('name');
 
-    // Dohvati verificirane pružatelje
+    // Dohvati verificirane partnere
     const { data: providers } = await supabase
       .from('service_providers')
       .select('id, updated_at')
@@ -84,9 +84,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    // Pružatelj profili
+    // Partner profili
     const providerPages = (providers || []).map(provider => ({
-      url: `${baseUrl}/pruzatelj/${provider.id}`,
+      url: `${baseUrl}/partner/${provider.id}`,
       lastModified: new Date(provider.updated_at || new Date()),
       changeFrequency: 'monthly' as const,
       priority: 0.6,

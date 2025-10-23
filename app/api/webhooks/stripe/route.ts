@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
           throw bookingUpdateError;
         }
         
-        // Auto-payout pružatelju (transfer je već napravljen u Payment Intent)
+        // Auto-payout partneru (transfer je već napravljen u Payment Intent)
         const { error: payoutUpdateError } = await supabase
           .from('payments')
           .update({ payout_at: new Date().toISOString() })
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
               )
             });
             
-            // Email pružatelju
+            // Email partneru
             await sendEmail({
               to: bookingData.provider[0].user[0].email,
               subject: 'Novo plaćanje primljeno - Marketplace',

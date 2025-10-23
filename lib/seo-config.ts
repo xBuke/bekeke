@@ -1,11 +1,13 @@
-// Centralni SEO config - izmijeni ove vrijednosti kad odabereš naziv i domenu
+// Centralni SEO config - Uslugo platforma za lokalne usluge
 export const seoConfig = {
-  name: "MARKETPLACE_NAME", // Promijeni u finalni naziv
-  url: "https://YOUR-DOMAIN.com", // Promijeni u finalnu domenu
-  description: "Pronađite provjerene majstore i pružatelje usluga u vašem gradu. Vodoinstalateri, električari, čistačice i više.",
+  name: "Uslugo",
+  url: "https://uslugo.hr",
+  description: "Pronađite provjerene majstore i partnere usluga u vašem gradu. Vodoinstalateri, električari, čistačice i više. Uslugo - vaš pouzdani partner za lokalne usluge.",
   keywords: [
+    'uslugo',
     'usluge',
     'majstori', 
+    'partneri',
     'hrvatska',
     'split',
     'zagreb',
@@ -21,11 +23,13 @@ export const seoConfig = {
     'dadilja',
     'instruktor',
     'it stručnjak',
-    'frizer'
+    'frizer',
+    'lokalne usluge',
+    'provjereni majstori'
   ] as string[],
   ogImage: "/og-image.png", // Dodaj sliku kasnije
-  twitterHandle: "@marketplace_hr", // Promijeni kad odabereš handle
-  author: "Marketplace Team",
+  twitterHandle: "@uslugo_hr",
+  author: "Uslugo Team",
   locale: "hr_HR",
   
   // Gradovi

@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         '/admin/',
         '/api/',
         '/klijent/',
-        '/pruzatelj/',
+        '/partner/',
         '/_next/',
         '/private/',
       ],

@@ -23,7 +23,7 @@ interface City {
   name: string
 }
 
-export default function RegisterPruzateljPage() {
+export default function RegisterPartnerPage() {
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
@@ -233,7 +233,7 @@ export default function RegisterPruzateljPage() {
         },
         body: JSON.stringify({
           ...formData,
-          role: 'pruzatelj',
+          role: 'partner',
           id_card_url: idCardData.publicUrl,
           profile_photo_url: profilePhotoUrl,
           emergency_fee: formData.emergency_available ? parseFloat(formData.emergency_fee) : null
@@ -244,7 +244,7 @@ export default function RegisterPruzateljPage() {
 
       if (data.success) {
         toast.success('Registracija uspješna! Vaš račun čeka verifikaciju.')
-        router.push('/pruzatelj/dashboard')
+        router.push('/partner/dashboard')
       } else {
         toast.error(data.error || 'Dogodila se greška tijekom registracije')
       }
@@ -271,9 +271,9 @@ export default function RegisterPruzateljPage() {
       <div className="max-w-2xl w-full space-y-8">
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Registracija pružatelja</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Registracija partnera</CardTitle>
             <CardDescription className="text-center">
-              Unesite svoje podatke za kreiranje pružateljskog računa
+              Unesite svoje podatke za kreiranje partnerskog računa
             </CardDescription>
           </CardHeader>
           <CardContent>

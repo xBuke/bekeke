@@ -1,8 +1,8 @@
-# MARKETPLACE ZA LOKALNE USLUŽNE DJELATNOSTI - MVP
+# USLUGO - PLATFORMA ZA LOKALNE USLUŽNE DJELATNOSTI - MVP
 
 ## 🎯 PROJEKT OVERVIEW
 
-**Cilj:** Platforma koja povezuje pružatelje lokalnih usluga s klijentima u Hrvatskoj.
+**Cilj:** Platforma koja povezuje partnere lokalnih usluga s klijentima u Hrvatskoj.
 
 **Lokacije:** Split, Zagreb, Rijeka, Osijek, Dubrovnik
 
@@ -738,7 +738,7 @@ export async function requireRole(allowedRoles: string[]) {
 - Checkbox "Prihvaćam uvjete korištenja"
 - Submit button
 
-**Korak 2B - Registracija pružatelja:**
+**Korak 2B - Registracija partnera:**
 - Sve iz 2A +
 - Naziv obrta (optional)
 - OIB (obavezno)
@@ -759,7 +759,7 @@ export async function requireRole(allowedRoles: string[]) {
 
 **Nakon uspješne registracije:**
 - Klijent → redirect na `/klijent/dashboard`
-- Pružatelj → redirect na `/pruzatelj/dashboard` s message "Vaš račun čeka verifikaciju"
+- Partner → redirect na `/partner/dashboard` s message "Vaš račun čeka verifikaciju"
 
 **Provjera:** Forme funkcioniraju, validacija radi, korisnici se spremaju u Supabase
 

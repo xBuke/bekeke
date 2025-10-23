@@ -15,15 +15,15 @@ import {
 } from 'lucide-react';
 
 const navigation = [
-  { name: 'Pregled', href: '/pruzatelj', icon: BarChart3 },
-  { name: 'Zahtjevi', href: '/pruzatelj/zahtjevi', icon: Calendar },
-  { name: 'Kalendar', href: '/pruzatelj/kalendar', icon: Calendar },
-  { name: 'Moje usluge', href: '/pruzatelj/usluge', icon: Wrench },
-  { name: 'Profil', href: '/pruzatelj/profil', icon: User },
-  { name: 'Postavke', href: '/pruzatelj/postavke', icon: Settings },
+  { name: 'Pregled', href: '/partner', icon: BarChart3 },
+  { name: 'Zahtjevi', href: '/partner/zahtjevi', icon: Calendar },
+  { name: 'Kalendar', href: '/partner/kalendar', icon: Calendar },
+  { name: 'Moje usluge', href: '/partner/usluge', icon: Wrench },
+  { name: 'Profil', href: '/partner/profil', icon: User },
+  { name: 'Postavke', href: '/partner/postavke', icon: Settings },
 ];
 
-export default function PruzateljSidebar() {
+export default function PartnerSidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 

@@ -15,7 +15,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
-              Marketplace
+              Uslugo
             </Link>
           </div>
 
@@ -31,7 +31,7 @@ export default function Header() {
               href="/register" 
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              Postani pružatelj
+              Postani partner
             </Link>
           </nav>
 
@@ -74,7 +74,7 @@ export default function Header() {
                 className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Postani pružatelj
+                Postani partner
               </Link>
               <div className="pt-4 space-y-2">
                 <Button variant="ghost" asChild className="w-full justify-start">

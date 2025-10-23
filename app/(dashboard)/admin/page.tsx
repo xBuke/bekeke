@@ -27,7 +27,7 @@ export default async function AdminPage() {
       <main className="flex-1 p-6 space-y-6">
         <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatsCard title="Verified pružatelji" count={verifiedCount ?? 0} icon={<CheckCircle2 />} />
+          <StatsCard title="Verified partneri" count={verifiedCount ?? 0} icon={<CheckCircle2 />} />
           <StatsCard title="Čeka verifikaciju" count={pendingCount ?? 0} icon={<Clock />} />
           <StatsCard title="Bookings (ovaj mjesec)" count={bookingsCount ?? 0} icon={<CalendarDays />} />
           <StatsCard title="Provizija (ovaj mjesec)" count={`${totalFees.toFixed(2)}€`} icon={<DollarSign />} />
@@ -35,7 +35,7 @@ export default async function AdminPage() {
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Novi pružatelji</h2>
+            <h2 className="text-xl font-semibold">Novi partneri</h2>
           </div>
           <PendingProvidersTable />
         </section>

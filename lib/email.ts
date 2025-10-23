@@ -47,7 +47,7 @@ export const emailTemplates = {
         ${isEmergency ? '<p style="color: #dc2626; font-weight: bold;">🚨 HITNA INTERVENCIJA</p>' : ''}
       </div>
       <p>Molimo prihvatite ili odbijte zahtjev u vašem dashboardu.</p>
-      <a href="${process.env.NEXT_PUBLIC_APP_URL}/pruzatelj" 
+      <a href="${process.env.NEXT_PUBLIC_APP_URL}/partner" 
          style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px;">
         Pogledaj zahtjev
       </a>
@@ -102,7 +102,7 @@ export const emailTemplates = {
         Poveži Stripe račun
       </a>
       <p style="margin-top: 20px;">Ili pristupite vašem dashboardu:</p>
-      <a href="${process.env.NEXT_PUBLIC_APP_URL}/pruzatelj" 
+      <a href="${process.env.NEXT_PUBLIC_APP_URL}/partner" 
          style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 10px;">
         Pružatelj Dashboard
       </a>
@@ -161,7 +161,7 @@ export const emailTemplates = {
         <p><strong>Vaš iznos:</strong> ${providerAmount.toFixed(2)}€</p>
       </div>
       <p>Kontaktirajte klijenta prije termina. Novac će biti prebačen na vaš račun u roku od 2-3 radna dana.</p>
-      <a href="${process.env.NEXT_PUBLIC_APP_URL}/pruzatelj" 
+      <a href="${process.env.NEXT_PUBLIC_APP_URL}/partner" 
          style="display: inline-block; background: #16a34a; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px;">
         Pružatelj Dashboard
       </a>

@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">O nama</h3>
             <p className="text-gray-600 text-sm leading-relaxed">
-              Povezujemo pružatelje lokalnih usluga s klijentima u Hrvatskoj. 
+              Povezujemo partnere lokalnih usluga s klijentima u Hrvatskoj. 
               Pronađite provjerene majstore u vašem gradu.
             </p>
           </div>
@@ -45,7 +45,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Kontakt</h3>
             <div className="space-y-2 text-sm text-gray-600">
-              <p>Email: info@marketplace.hr</p>
+              <p>Email: info@uslugo.hr</p>
               <p>Telefon: +385 1 234 5678</p>
               <div className="flex space-x-4 mt-4">
                 <a href="#" className="text-gray-400 hover:text-blue-600">
@@ -65,7 +65,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="border-t mt-8 pt-8 text-center">
           <p className="text-sm text-gray-500">
-            © 2024 Marketplace. Sva prava pridržana.
+            © 2025 Uslugo. Sva prava pridržana. | Powered by MangAi
           </p>
         </div>
       </div>

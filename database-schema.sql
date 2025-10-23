@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ENUM tipovi
-CREATE TYPE user_role AS ENUM ('klijent', 'pruzatelj', 'admin');
+CREATE TYPE user_role AS ENUM ('klijent', 'partner', 'admin');
 CREATE TYPE booking_status AS ENUM ('pending', 'accepted', 'rejected', 'completed', 'cancelled');
 CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'refunded', 'failed');
 CREATE TYPE verification_status AS ENUM ('pending', 'verified', 'rejected');
@@ -37,7 +37,7 @@ CREATE TABLE categories (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. Pružatelji usluga (profili)
+-- 4. Partneri usluga (profili)
 CREATE TABLE service_providers (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE UNIQUE NOT NULL,

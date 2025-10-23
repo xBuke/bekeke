@@ -54,7 +54,7 @@ export default function ResultsGrid({ providers, categories, cities }: ResultsGr
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               {providers.length > 0 
-                ? `Pronađeno ${providers.length} pružatelja`
+                ? `Pronađeno ${providers.length} partnera`
                 : 'Nema rezultata'
               }
             </h1>
@@ -79,7 +79,7 @@ export default function ResultsGrid({ providers, categories, cities }: ResultsGr
                 Nema rezultata
               </h3>
               <p className="text-gray-600 mb-6">
-                Nismo pronašli pružatelje koji odgovaraju vašim kriterijima.
+                Nismo pronašli partnere koji odgovaraju vašim kriterijima.
               </p>
               <div className="space-y-2">
                 <p className="text-sm text-gray-500">Pokušajte:</p>

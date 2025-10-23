@@ -5,9 +5,9 @@ import { ServiceProvider, Category, City } from '@/types';
 
 export default async function ProviderProfilePage() {
   // Provjeri autentifikaciju i ulogu
-  const user = await requireRole(['pruzatelj']);
+  const user = await requireRole(['partner']);
 
-  // Dohvati podatke o pružatelju s svim relacijama
+  // Dohvati podatke o partneru s svim relacijama
   const { data: provider, error } = await supabase
     .from('service_providers')
     .select(`
@@ -23,7 +23,7 @@ export default async function ProviderProfilePage() {
     .single();
 
   if (error || !provider) {
-    throw new Error('Pružatelj profil nije pronađen');
+    throw new Error('Partner profil nije pronađen');
   }
 
   // Transformiraj podatke za lakše korištenje

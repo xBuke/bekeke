@@ -9,14 +9,14 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 
 export default function RegisterPage() {
-  const [accountType, setAccountType] = useState<'klijent' | 'pruzatelj' | null>(null)
+  const [accountType, setAccountType] = useState<'klijent' | 'partner' | null>(null)
   const router = useRouter()
 
   const handleContinue = () => {
     if (accountType === 'klijent') {
       router.push('/register/klijent')
-    } else if (accountType === 'pruzatelj') {
-      router.push('/register/pruzatelj')
+    } else if (accountType === 'partner') {
+      router.push('/register/partner')
     }
   }
 
@@ -51,15 +51,15 @@ export default function RegisterPage() {
 
                 <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                   <Checkbox
-                    id="pruzatelj"
-                    checked={accountType === 'pruzatelj'}
-                    onCheckedChange={() => setAccountType('pruzatelj')}
+                    id="partner"
+                    checked={accountType === 'partner'}
+                    onCheckedChange={() => setAccountType('partner')}
                   />
                   <div className="flex-1">
-                    <Label htmlFor="pruzatelj" className="cursor-pointer">
-                      <div className="font-medium">Nudim uslugu</div>
+                    <Label htmlFor="partner" className="cursor-pointer">
+                      <div className="font-medium">Nudim uslugu (partner)</div>
                       <div className="text-sm text-gray-600">
-                        Registrirajte se kao pružatelj da biste mogli nuditi svoje usluge
+                        Registrirajte se kao partner da biste mogli nuditi svoje usluge
                       </div>
                     </Label>
                   </div>
